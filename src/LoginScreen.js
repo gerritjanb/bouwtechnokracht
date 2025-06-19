@@ -1,51 +1,103 @@
-import { useState } from "react";
-import Dashboard from "./Dashboard"; // zonder /dash map!
+import React, { useState } from 'react';
+import {
+  Box,
+  Card,
+  CardContent,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Link,
+  Button,
+  Typography
+} from '@mui/material';
+import logo from './Logo1.png';
 
-export default function LoginScreen() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
+export default function LoginScreen({ onLogin }) {
+  const [role, setRole] = useState('ZZP\'er');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [remember, setRemember] = useState(false);
 
-  const handleLogin = () => {
-    if (email === "1234" && password === "1234") {
-      setLoggedIn(true);
-    } else {
-      alert("Onjuiste inloggegevens");
-    }
+  const handleSubmit = e => {
+    e.preventDefault();
+    onLogin({ role, email, password });
   };
 
-  if (loggedIn) {
-    return <Dashboard />;
-  }
-
   return (
-    <div style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#5E2E91" }}>
-      <div style={{ background: "#FFFFFF", padding: "2rem", borderRadius: "8px", width: "100%", maxWidth: "400px", boxShadow: "0 0 10px rgba(0,0,0,0.1)" }}>
-        <img src="/logo.svg" alt="Bedrijfslogo" style={{ width: "100px", display: "block", margin: "0 auto 1.5rem" }} />
-        <h2 style={{ color: "#000000", textAlign: "center", marginBottom: "1rem" }}>Inloggen</h2>
+    <Box sx={{
+      display: 'flex',
+      minHeight: '100vh',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#F9FAFB',
+      p: 2
+    }}>
+      <Card sx={{ width: 360, boxShadow: 3 }}>
+        <CardContent>
+          <Box sx={{ textAlign: 'center', mb: 2 }}>
+            <Box component="img" src={logo} alt="Logo" sx={{ maxWidth: 120 }} />
+          </Box>
+          <Typography variant="h5" align="center" sx={{ mb: 3, fontWeight: 'bold' }}>Inloggen</Typography>
+          <form onSubmit={handleSubmit}>
+            <TextField
+              select
+              label="Rol"
+              value={role}
+              onChange={e => setRole(e.target.value)}
+              SelectProps={{ native: true }}
+              fullWidth
+              sx={{ mb: 2 }}
+            >
+              <option value="ZZP'er">ZZP’er</option>
+              <option value="Opdrachtgever">Opdrachtgever</option>
+              <option value="Uitzendbureau">Uitzendbureau</option>
+            </TextField>
 
-        <input
-          type="text"
-          placeholder="Gebruikersnaam"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={{ display: "block", width: "100%", marginBottom: "1rem", padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}
-        />
-        <input
-          type="password"
-          placeholder="Wachtwoord"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={{ display: "block", width: "100%", marginBottom: "1rem", padding: "0.75rem", borderRadius: "4px", border: "1px solid #ccc" }}
-        />
+            <TextField
+              label="E-mailadres"
+              type="email"
+              fullWidth
+              sx={{ mb: 2 }}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+            />
 
-        <button
-          onClick={handleLogin}
-          style={{ width: "100%", padding: "0.75rem", backgroundColor: "#F39200", color: "#FFFFFF", border: "none", borderRadius: "4px", fontWeight: "bold", cursor: "pointer" }}
-        >
-          Inloggen
-        </button>
-      </div>
-    </div>
+            <TextField
+              label="Wachtwoord"
+              type="password"
+              fullWidth
+              sx={{ mb: 2 }}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+            />
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={remember}
+                  onChange={e => setRemember(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Ingelogd blijven"
+            />
+
+            <Box sx={{ textAlign: 'right', mb: 2 }}>
+              <Link href="#" underline="hover" color="secondary">
+                Wachtwoord vergeten?
+              </Link>
+            </Box>
+
+            <Button type="submit" variant="contained" color="secondary" fullWidth sx={{ mb: 1 }}>
+              Inloggen
+            </Button>
+
+            <Typography variant="body2" align="center">
+              Nog geen account? <Link href="#">Meld je aan</Link>
+            </Typography>
+          </form>
+        </CardContent>
+      </Card>
+    </Box>
   );
 }
